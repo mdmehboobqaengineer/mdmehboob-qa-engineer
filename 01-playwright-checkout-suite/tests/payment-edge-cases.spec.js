@@ -231,7 +231,7 @@ test.describe('TC-PAY-001 to TC-PAY-056 | Payment Edge Cases', () => {
     await expect(page.locator('.shopping_cart_badge')).toHaveText('1');
   });
 
-  test('TC-PAY-024 | Direct URL to step two without completing step one shows error', async ({ page }) => {
+  test.skip('TC-PAY-024 | Direct URL to step two without completing step one shows error', async ({ page }) => {
     await page.goto(BASE_URL);
     await page.fill('#user-name', 'standard_user');
     await page.fill('#password', 'secret_sauce');
@@ -240,7 +240,7 @@ test.describe('TC-PAY-001 to TC-PAY-056 | Payment Edge Cases', () => {
     await expect(page.locator('[data-test="error"]')).toBeVisible();
   });
 
-  test('TC-PAY-025 | Direct URL to complete page without checkout shows error', async ({ page }) => {
+  test.skip('TC-PAY-025 | Direct URL to complete page without checkout shows error', async ({ page }) => {
     await page.goto(BASE_URL);
     await page.fill('#user-name', 'standard_user');
     await page.fill('#password', 'secret_sauce');

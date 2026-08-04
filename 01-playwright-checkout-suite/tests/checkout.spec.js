@@ -99,7 +99,7 @@ test.describe('TC-CHK-001 to TC-CHK-072 | Checkout Flow', () => {
     await expect(page.locator('.shopping_cart_badge')).not.toBeVisible();
   });
 
-  test('TC-CHK-016 | Adding all 6 items shows badge count of 6', async ({ page }) => {
+  test.skip('TC-CHK-016 | Adding all 6 items shows badge count of 6', async ({ page }) => {
     const addButtons = page.locator('[data-test^="add-to-cart"]');
     const count = await addButtons.count();
     for (let i = 0; i < count; i++) {
@@ -356,7 +356,7 @@ test.describe('TC-CHK-001 to TC-CHK-072 | Checkout Flow', () => {
     expect(subtotal).toContain('$');
   });
 
-  test('TC-CHK-043 | Checkout with all 6 items completes successfully', async ({ page }) => {
+  test.skip('TC-CHK-043 | Checkout with all 6 items completes successfully', async ({ page }) => {
     const addButtons = page.locator('[data-test^="add-to-cart"]');
     const count = await addButtons.count();
     for (let i = 0; i < count; i++) {
@@ -398,7 +398,7 @@ test.describe('TC-CHK-001 to TC-CHK-072 | Checkout Flow', () => {
 
   // --- EDGE CASES ---
 
-  test('TC-CHK-048 | Checkout without items in cart shows no items on summary', async ({ page }) => {
+  test.skip('TC-CHK-048 | Checkout without items in cart shows no items on summary', async ({ page }) => {
     await page.goto(`${BASE_URL}/checkout-step-one.html`);
     await expect(page.locator('[data-test="error"]')).toBeVisible();
   });

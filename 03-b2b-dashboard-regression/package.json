@@ -1,0 +1,14 @@
+{
+  "name": "b2b-dashboard-regression",
+  "version": "1.0.0",
+  "description": "B2B dashboard regression suite — 28 automated + 92 manual test cases, 12 critical bugs caught. By Muhammad Mehboob, QA Engineer.",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "test:report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0"
+  }
+}

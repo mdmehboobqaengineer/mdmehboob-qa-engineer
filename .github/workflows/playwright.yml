@@ -1,0 +1,54 @@
+name: Playwright Tests
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test-project-01:
+    name: 01 — Checkout Suite
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+          cache-dependency-path: 01-playwright-checkout-suite/package-lock.json
+      - run: npm ci
+        working-directory: 01-playwright-checkout-suite
+      - run: npx playwright install --with-deps chromium
+        working-directory: 01-playwright-checkout-suite
+      - run: npx playwright test --reporter=github
+        working-directory: 01-playwright-checkout-suite
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report-project-01
+          path: 01-playwright-checkout-suite/playwright-report/
+          retention-days: 14
+
+  test-project-03:
+    name: 03 — Dashboard Regression
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+          cache-dependency-path: 03-b2b-dashboard-regression/package-lock.json
+      - run: npm ci
+        working-directory: 03-b2b-dashboard-regression
+      - run: npx playwright install --with-deps chromium
+        working-directory: 03-b2b-dashboard-regression
+      - run: npx playwright test --reporter=github
+        working-directory: 03-b2b-dashboard-regression
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report-project-03
+          path: 03-b2b-dashboard-regression/playwright-report/
+          retention-days: 14

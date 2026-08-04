@@ -1,0 +1,640 @@
+{
+  "info": {
+    "_postman_id": "qa-portfolio-api-suite-v1",
+    "name": "QA Portfolio — API Validation Suite",
+    "description": "Comprehensive REST API validation suite by Muhammad Mehboob (QA Engineer). Covers authentication, CRUD operations, error handling, schema validation, and data integrity across 180+ test assertions.\n\nBase API: https://reqres.in/api\nContact: mdmehboobqaengineer@gmail.com",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "https://reqres.in/api" },
+    { "key": "authToken", "value": "" },
+    { "key": "createdUserId", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "TC-AUTH-API-001 | POST Login — valid credentials",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-AUTH-API-001 | Status code is 200', () => { pm.response.to.have.status(200); });",
+                  "pm.test('TC-AUTH-API-001 | Response has token field', () => { pm.expect(pm.response.json()).to.have.property('token'); });",
+                  "pm.test('TC-AUTH-API-001 | Token is a non-empty string', () => { pm.expect(pm.response.json().token).to.be.a('string').and.not.empty; });",
+                  "pm.test('TC-AUTH-API-001 | Content-Type is application/json', () => { pm.response.to.have.header('Content-Type'); });",
+                  "pm.test('TC-AUTH-API-001 | Response time is under 3000ms', () => { pm.expect(pm.response.responseTime).to.be.below(3000); });",
+                  "const token = pm.response.json().token; pm.collectionVariables.set('authToken', token);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/login",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"eve.holt@reqres.in\",\n  \"password\": \"cityslicka\"\n}"
+            }
+          }
+        },
+        {
+          "name": "TC-AUTH-API-002 | POST Login — invalid password",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-AUTH-API-002 | Status code is 400', () => { pm.response.to.have.status(400); });",
+                  "pm.test('TC-AUTH-API-002 | Response has error field', () => { pm.expect(pm.response.json()).to.have.property('error'); });",
+                  "pm.test('TC-AUTH-API-002 | Error message is not empty', () => { pm.expect(pm.response.json().error).to.not.be.empty; });",
+                  "pm.test('TC-AUTH-API-002 | No token returned on failed login', () => { pm.expect(pm.response.json()).to.not.have.property('token'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/login",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"eve.holt@reqres.in\",\n  \"password\": \"wrongpassword\"\n}"
+            }
+          }
+        },
+        {
+          "name": "TC-AUTH-API-003 | POST Login — missing email",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-AUTH-API-003 | Status code is 400', () => { pm.response.to.have.status(400); });",
+                  "pm.test('TC-AUTH-API-003 | Error field present', () => { pm.expect(pm.response.json()).to.have.property('error'); });",
+                  "pm.test('TC-AUTH-API-003 | Error references missing field', () => { pm.expect(pm.response.json().error).to.include('Missing'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/login",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"password\": \"cityslicka\"\n}"
+            }
+          }
+        },
+        {
+          "name": "TC-AUTH-API-004 | POST Login — missing password",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-AUTH-API-004 | Status code is 400', () => { pm.response.to.have.status(400); });",
+                  "pm.test('TC-AUTH-API-004 | Error field present', () => { pm.expect(pm.response.json()).to.have.property('error'); });",
+                  "pm.test('TC-AUTH-API-004 | No token in response', () => { pm.expect(pm.response.json()).to.not.have.property('token'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/login",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"eve.holt@reqres.in\"\n}"
+            }
+          }
+        },
+        {
+          "name": "TC-AUTH-API-005 | POST Login — empty body",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-AUTH-API-005 | Status code is 400', () => { pm.response.to.have.status(400); });",
+                  "pm.test('TC-AUTH-API-005 | Error field present', () => { pm.expect(pm.response.json()).to.have.property('error'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/login",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{}" }
+          }
+        },
+        {
+          "name": "TC-AUTH-API-006 | POST Register — valid",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-AUTH-API-006 | Status code is 200', () => { pm.response.to.have.status(200); });",
+                  "pm.test('TC-AUTH-API-006 | Response has id field', () => { pm.expect(pm.response.json()).to.have.property('id'); });",
+                  "pm.test('TC-AUTH-API-006 | Response has token field', () => { pm.expect(pm.response.json()).to.have.property('token'); });",
+                  "pm.test('TC-AUTH-API-006 | ID is a number', () => { pm.expect(pm.response.json().id).to.be.a('number'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/register",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"eve.holt@reqres.in\",\n  \"password\": \"pistol\"\n}"
+            }
+          }
+        },
+        {
+          "name": "TC-AUTH-API-007 | POST Register — missing password",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-AUTH-API-007 | Status code is 400', () => { pm.response.to.have.status(400); });",
+                  "pm.test('TC-AUTH-API-007 | Error field present', () => { pm.expect(pm.response.json()).to.have.property('error'); });",
+                  "pm.test('TC-AUTH-API-007 | No token returned', () => { pm.expect(pm.response.json()).to.not.have.property('token'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/register",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"eve.holt@reqres.in\"\n}" }
+          }
+        },
+        {
+          "name": "TC-AUTH-API-008 | POST Register — undefined user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-AUTH-API-008 | Status code is 400', () => { pm.response.to.have.status(400); });",
+                  "pm.test('TC-AUTH-API-008 | Error field present', () => { pm.expect(pm.response.json()).to.have.property('error'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/register",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"email\": \"unknown@fake.com\",\n  \"password\": \"test\"\n}" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users — GET",
+      "item": [
+        {
+          "name": "TC-GET-001 | GET /users — list page 1",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-GET-001 | Status is 200', () => { pm.response.to.have.status(200); });",
+                  "pm.test('TC-GET-001 | Response has data array', () => { pm.expect(pm.response.json()).to.have.property('data').that.is.an('array'); });",
+                  "pm.test('TC-GET-001 | Data array is not empty', () => { pm.expect(pm.response.json().data.length).to.be.greaterThan(0); });",
+                  "pm.test('TC-GET-001 | Response has page field', () => { pm.expect(pm.response.json()).to.have.property('page'); });",
+                  "pm.test('TC-GET-001 | Page is 1', () => { pm.expect(pm.response.json().page).to.equal(1); });",
+                  "pm.test('TC-GET-001 | Response has total field', () => { pm.expect(pm.response.json()).to.have.property('total'); });",
+                  "pm.test('TC-GET-001 | Response has per_page field', () => { pm.expect(pm.response.json()).to.have.property('per_page'); });",
+                  "pm.test('TC-GET-001 | Each user has id, email, first_name, last_name, avatar', () => { pm.response.json().data.forEach(u => { pm.expect(u).to.have.all.keys('id','email','first_name','last_name','avatar'); }); });",
+                  "pm.test('TC-GET-001 | Response time under 3000ms', () => { pm.expect(pm.response.responseTime).to.be.below(3000); });"
+                ]
+              }
+            }
+          ],
+          "request": { "method": "GET", "url": "{{baseUrl}}/users?page=1" }
+        },
+        {
+          "name": "TC-GET-002 | GET /users — list page 2",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-GET-002 | Status is 200', () => { pm.response.to.have.status(200); });",
+                  "pm.test('TC-GET-002 | Page is 2', () => { pm.expect(pm.response.json().page).to.equal(2); });",
+                  "pm.test('TC-GET-002 | Data array has items', () => { pm.expect(pm.response.json().data.length).to.be.greaterThan(0); });"
+                ]
+              }
+            }
+          ],
+          "request": { "method": "GET", "url": "{{baseUrl}}/users?page=2" }
+        },
+        {
+          "name": "TC-GET-003 | GET /users/2 — single user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-GET-003 | Status is 200', () => { pm.response.to.have.status(200); });",
+                  "pm.test('TC-GET-003 | Response has data object', () => { pm.expect(pm.response.json()).to.have.property('data').that.is.an('object'); });",
+                  "pm.test('TC-GET-003 | User ID is 2', () => { pm.expect(pm.response.json().data.id).to.equal(2); });",
+                  "pm.test('TC-GET-003 | User has email', () => { pm.expect(pm.response.json().data).to.have.property('email'); });",
+                  "pm.test('TC-GET-003 | Email is valid format', () => { pm.expect(pm.response.json().data.email).to.match(/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/); });",
+                  "pm.test('TC-GET-003 | User has first_name', () => { pm.expect(pm.response.json().data.first_name).to.be.a('string').and.not.empty; });",
+                  "pm.test('TC-GET-003 | User has last_name', () => { pm.expect(pm.response.json().data.last_name).to.be.a('string').and.not.empty; });",
+                  "pm.test('TC-GET-003 | User has avatar URL', () => { pm.expect(pm.response.json().data.avatar).to.match(/^https?:\\/\\//); });"
+                ]
+              }
+            }
+          ],
+          "request": { "method": "GET", "url": "{{baseUrl}}/users/2" }
+        },
+        {
+          "name": "TC-GET-004 | GET /users/23 — not found",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-GET-004 | Status is 404', () => { pm.response.to.have.status(404); });",
+                  "pm.test('TC-GET-004 | Response body is empty object', () => { pm.expect(pm.response.json()).to.deep.equal({}); });"
+                ]
+              }
+            }
+          ],
+          "request": { "method": "GET", "url": "{{baseUrl}}/users/23" }
+        },
+        {
+          "name": "TC-GET-005 | GET /users?per_page=3 — pagination control",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-GET-005 | Status is 200', () => { pm.response.to.have.status(200); });",
+                  "pm.test('TC-GET-005 | per_page is 3', () => { pm.expect(pm.response.json().per_page).to.equal(3); });",
+                  "pm.test('TC-GET-005 | Data array has 3 items', () => { pm.expect(pm.response.json().data.length).to.equal(3); });"
+                ]
+              }
+            }
+          ],
+          "request": { "method": "GET", "url": "{{baseUrl}}/users?per_page=3" }
+        },
+        {
+          "name": "TC-GET-006 | GET /users — total_pages field is accurate",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-GET-006 | Status is 200', () => { pm.response.to.have.status(200); });",
+                  "pm.test('TC-GET-006 | total_pages equals ceil(total/per_page)', () => { const r = pm.response.json(); pm.expect(r.total_pages).to.equal(Math.ceil(r.total / r.per_page)); });"
+                ]
+              }
+            }
+          ],
+          "request": { "method": "GET", "url": "{{baseUrl}}/users" }
+        },
+        {
+          "name": "TC-GET-007 | GET /users — support object present",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-GET-007 | Status is 200', () => { pm.response.to.have.status(200); });",
+                  "pm.test('TC-GET-007 | Support object present', () => { pm.expect(pm.response.json()).to.have.property('support'); });",
+                  "pm.test('TC-GET-007 | Support has url', () => { pm.expect(pm.response.json().support).to.have.property('url'); });",
+                  "pm.test('TC-GET-007 | Support has text', () => { pm.expect(pm.response.json().support).to.have.property('text'); });"
+                ]
+              }
+            }
+          ],
+          "request": { "method": "GET", "url": "{{baseUrl}}/users" }
+        },
+        {
+          "name": "TC-GET-008 | GET /users/1 — first user exists",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-GET-008 | Status is 200', () => { pm.response.to.have.status(200); });",
+                  "pm.test('TC-GET-008 | User ID is 1', () => { pm.expect(pm.response.json().data.id).to.equal(1); });"
+                ]
+              }
+            }
+          ],
+          "request": { "method": "GET", "url": "{{baseUrl}}/users/1" }
+        },
+        {
+          "name": "TC-GET-009 | GET /users/0 — boundary: ID zero returns 404",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-GET-009 | Status is 404', () => { pm.response.to.have.status(404); });"
+                ]
+              }
+            }
+          ],
+          "request": { "method": "GET", "url": "{{baseUrl}}/users/0" }
+        },
+        {
+          "name": "TC-GET-010 | GET /users?page=999 — empty page returns empty data",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-GET-010 | Status is 200', () => { pm.response.to.have.status(200); });",
+                  "pm.test('TC-GET-010 | Data array is empty for non-existent page', () => { pm.expect(pm.response.json().data).to.be.an('array').that.is.empty; });"
+                ]
+              }
+            }
+          ],
+          "request": { "method": "GET", "url": "{{baseUrl}}/users?page=999" }
+        }
+      ]
+    },
+    {
+      "name": "Users — POST",
+      "item": [
+        {
+          "name": "TC-POST-001 | POST /users — create valid user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-POST-001 | Status is 201', () => { pm.response.to.have.status(201); });",
+                  "pm.test('TC-POST-001 | Response has id field', () => { pm.expect(pm.response.json()).to.have.property('id'); });",
+                  "pm.test('TC-POST-001 | Response has name matching request', () => { pm.expect(pm.response.json().name).to.equal('Muhammad Mehboob'); });",
+                  "pm.test('TC-POST-001 | Response has job matching request', () => { pm.expect(pm.response.json().job).to.equal('QA Engineer'); });",
+                  "pm.test('TC-POST-001 | Response has createdAt timestamp', () => { pm.expect(pm.response.json()).to.have.property('createdAt'); });",
+                  "pm.test('TC-POST-001 | createdAt is valid ISO date', () => { pm.expect(new Date(pm.response.json().createdAt).toString()).to.not.equal('Invalid Date'); });",
+                  "const id = pm.response.json().id; pm.collectionVariables.set('createdUserId', id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/users",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Muhammad Mehboob\",\n  \"job\": \"QA Engineer\"\n}" }
+          }
+        },
+        {
+          "name": "TC-POST-002 | POST /users — name only",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-POST-002 | Status is 201', () => { pm.response.to.have.status(201); });",
+                  "pm.test('TC-POST-002 | Name matches', () => { pm.expect(pm.response.json().name).to.equal('Test User'); });",
+                  "pm.test('TC-POST-002 | Job is undefined', () => { pm.expect(pm.response.json().job).to.be.undefined; });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/users",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Test User\"\n}" }
+          }
+        },
+        {
+          "name": "TC-POST-003 | POST /users — job only",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-POST-003 | Status is 201', () => { pm.response.to.have.status(201); });",
+                  "pm.test('TC-POST-003 | Job matches', () => { pm.expect(pm.response.json().job).to.equal('Tester'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/users",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"job\": \"Tester\"\n}" }
+          }
+        },
+        {
+          "name": "TC-POST-004 | POST /users — empty body",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-POST-004 | Status is 201', () => { pm.response.to.have.status(201); });",
+                  "pm.test('TC-POST-004 | Response has id', () => { pm.expect(pm.response.json()).to.have.property('id'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/users",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{}" }
+          }
+        },
+        {
+          "name": "TC-POST-005 | POST /users — special characters in name",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-POST-005 | Status is 201', () => { pm.response.to.have.status(201); });",
+                  "pm.test('TC-POST-005 | Name with special chars stored correctly', () => { pm.expect(pm.response.json().name).to.equal(\"O'Brien-Smith\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "url": "{{baseUrl}}/users",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"O'Brien-Smith\",\n  \"job\": \"QA Engineer\"\n}" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users — PUT/PATCH",
+      "item": [
+        {
+          "name": "TC-PUT-001 | PUT /users/2 — full update",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-PUT-001 | Status is 200', () => { pm.response.to.have.status(200); });",
+                  "pm.test('TC-PUT-001 | Name updated', () => { pm.expect(pm.response.json().name).to.equal('Muhammad Mehboob'); });",
+                  "pm.test('TC-PUT-001 | Job updated', () => { pm.expect(pm.response.json().job).to.equal('Senior QA Engineer'); });",
+                  "pm.test('TC-PUT-001 | updatedAt is present', () => { pm.expect(pm.response.json()).to.have.property('updatedAt'); });",
+                  "pm.test('TC-PUT-001 | updatedAt is valid date', () => { pm.expect(new Date(pm.response.json().updatedAt).toString()).to.not.equal('Invalid Date'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "url": "{{baseUrl}}/users/2",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"name\": \"Muhammad Mehboob\",\n  \"job\": \"Senior QA Engineer\"\n}" }
+          }
+        },
+        {
+          "name": "TC-PATCH-001 | PATCH /users/2 — partial update (job only)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-PATCH-001 | Status is 200', () => { pm.response.to.have.status(200); });",
+                  "pm.test('TC-PATCH-001 | Job field updated', () => { pm.expect(pm.response.json().job).to.equal('Lead QA Engineer'); });",
+                  "pm.test('TC-PATCH-001 | updatedAt present', () => { pm.expect(pm.response.json()).to.have.property('updatedAt'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/users/2",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"job\": \"Lead QA Engineer\"\n}" }
+          }
+        },
+        {
+          "name": "TC-PATCH-002 | PATCH /users/2 — empty body",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-PATCH-002 | Status is 200', () => { pm.response.to.have.status(200); });",
+                  "pm.test('TC-PATCH-002 | updatedAt still present', () => { pm.expect(pm.response.json()).to.have.property('updatedAt'); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "PATCH",
+            "url": "{{baseUrl}}/users/2",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{}" }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users — DELETE",
+      "item": [
+        {
+          "name": "TC-DEL-001 | DELETE /users/2 — valid delete",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-DEL-001 | Status is 204', () => { pm.response.to.have.status(204); });",
+                  "pm.test('TC-DEL-001 | Response body is empty', () => { pm.expect(pm.response.text()).to.be.empty; });"
+                ]
+              }
+            }
+          ],
+          "request": { "method": "DELETE", "url": "{{baseUrl}}/users/2" }
+        },
+        {
+          "name": "TC-DEL-002 | DELETE /users/999 — non-existent user",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-DEL-002 | Status is 204', () => { pm.response.to.have.status(204); });",
+                  "pm.test('TC-DEL-002 | Body is empty', () => { pm.expect(pm.response.text()).to.be.empty; });"
+                ]
+              }
+            }
+          ],
+          "request": { "method": "DELETE", "url": "{{baseUrl}}/users/999" }
+        }
+      ]
+    },
+    {
+      "name": "Error Handling",
+      "item": [
+        {
+          "name": "TC-ERR-001 | GET non-existent endpoint — 404",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-ERR-001 | Status is 404', () => { pm.response.to.have.status(404); });"
+                ]
+              }
+            }
+          ],
+          "request": { "method": "GET", "url": "{{baseUrl}}/nonexistent-endpoint" }
+        },
+        {
+          "name": "TC-ERR-002 | GET /unknown — returns 404",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-ERR-002 | Status is 404', () => { pm.response.to.have.status(404); });",
+                  "pm.test('TC-ERR-002 | Response is empty object', () => { pm.expect(pm.response.json()).to.deep.equal({}); });"
+                ]
+              }
+            }
+          ],
+          "request": { "method": "GET", "url": "{{baseUrl}}/unknown" }
+        },
+        {
+          "name": "TC-ERR-003 | Response time is under 3 seconds for all endpoints",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('TC-ERR-003 | Response time under 3000ms', () => { pm.expect(pm.response.responseTime).to.be.below(3000); });"
+                ]
+              }
+            }
+          ],
+          "request": { "method": "GET", "url": "{{baseUrl}}/users" }
+        }
+      ]
+    }
+  ]
+}

@@ -8,7 +8,7 @@ on:
 
 jobs:
   test-project-01:
-    name: 01 — Checkout Suite
+    name: Checkout Suite
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -19,7 +19,7 @@ jobs:
         working-directory: 01-playwright-checkout-suite
       - run: npx playwright install --with-deps chromium
         working-directory: 01-playwright-checkout-suite
-     - run: npx playwright test --project=chromium
+      - run: npx playwright test --project=chromium
         working-directory: 01-playwright-checkout-suite
       - uses: actions/upload-artifact@v4
         if: always()
@@ -29,7 +29,7 @@ jobs:
           retention-days: 14
 
   test-project-03:
-    name: 03 — Dashboard Regression
+    name: Dashboard Regression
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

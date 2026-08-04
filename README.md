@@ -1,6 +1,6 @@
 # QA Engineering Portfolio — Muhammad Mehboob
 
-[![Playwright Tests](https://github.com/mdmehboobdev/qa-engineering-portfolio/actions/workflows/playwright.yml/badge.svg)](https://github.com/mdmehboobdev/qa-engineering-portfolio/actions/workflows/playwright.yml)
+[![Playwright Tests](https://github.com/mdmehboobqaengineer/mdmehboob-qa-engineer/actions/workflows/playwright.yml/badge.svg)](https://github.com/mdmehboobqaengineer/mdmehboob-qa-engineer/actions/workflows/playwright.yml)
 ![Test Cases](https://img.shields.io/badge/Test%20Cases-500%2B-blue)
 ![Bugs Reported](https://img.shields.io/badge/Bugs%20Reported-100%2B-red)
 ![Acceptance Rate](https://img.shields.io/badge/Bug%20Acceptance-95%25-brightgreen)

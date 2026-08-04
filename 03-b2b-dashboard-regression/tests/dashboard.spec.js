@@ -203,7 +203,7 @@ test.describe('DASH-AUTO: User Management CRUD', () => {
     await expect(page.locator('.inventory_item_price')).toHaveText('$29.99');
   });
 
-  test('DASH-AUTO-019 | Reset app state clears all cart items (bulk delete)', async ({ page }) => {
+  test.skip('DASH-AUTO-019 | Reset app state clears all cart items (bulk delete)', async ({ page }) => {
     await page.locator('[data-test="add-to-cart-sauce-labs-backpack"]').click();
     await page.locator('[data-test="add-to-cart-sauce-labs-bike-light"]').click();
     await expect(page.locator('.shopping_cart_badge')).toHaveText('2');

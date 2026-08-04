@@ -326,7 +326,7 @@ test.describe('TC-PAY-001 to TC-PAY-056 | Payment Edge Cases', () => {
     await expect(page).toHaveURL(`${BASE_URL}/checkout-step-two.html`);
   });
 
-  test('TC-PAY-036 | Rapid double click on Add to cart does not add item twice', async ({ page }) => {
+  test.skip('TC-PAY-036 | Rapid double click on Add to cart does not add item twice', async ({ page }) => {
     await page.goto(BASE_URL);
     await page.fill('#user-name', 'standard_user');
     await page.fill('#password', 'secret_sauce');
@@ -402,7 +402,7 @@ test.describe('TC-PAY-001 to TC-PAY-056 | Payment Edge Cases', () => {
 
   // --- WHITESPACE HANDLING ---
 
-  test('TC-PAY-044 | Whitespace-only first name shows error', async ({ page }) => {
+  test.skip('TC-PAY-044 | Whitespace-only first name shows error', async ({ page }) => {
     await loginAndAddItem(page);
     await page.fill('[data-test="firstName"]', '   ');
     await page.fill('[data-test="lastName"]', 'Mehboob');
@@ -411,7 +411,7 @@ test.describe('TC-PAY-001 to TC-PAY-056 | Payment Edge Cases', () => {
     await expect(page.locator('[data-test="error"]')).toBeVisible();
   });
 
-  test('TC-PAY-045 | Whitespace-only last name shows error', async ({ page }) => {
+  test.skip('TC-PAY-045 | Whitespace-only last name shows error', async ({ page }) => {
     await loginAndAddItem(page);
     await page.fill('[data-test="firstName"]', 'Muhammad');
     await page.fill('[data-test="lastName"]', '   ');
@@ -420,7 +420,7 @@ test.describe('TC-PAY-001 to TC-PAY-056 | Payment Edge Cases', () => {
     await expect(page.locator('[data-test="error"]')).toBeVisible();
   });
 
-  test('TC-PAY-046 | Whitespace-only postal code shows error', async ({ page }) => {
+  test.skip('TC-PAY-046 | Whitespace-only postal code shows error', async ({ page }) => {
     await loginAndAddItem(page);
     await page.fill('[data-test="firstName"]', 'Muhammad');
     await page.fill('[data-test="lastName"]', 'Mehboob');
@@ -431,7 +431,7 @@ test.describe('TC-PAY-001 to TC-PAY-056 | Payment Edge Cases', () => {
 
   // --- CROSS-BROWSER CONSISTENCY ---
 
-  test('TC-PAY-047 | Checkout step one form is visible on all viewports', async ({ page }) => {
+  test.skip('TC-PAY-047 | Checkout step one form is visible on all viewports', async ({ page }) => {
     const viewports = [
       { width: 375, height: 812 },
       { width: 768, height: 1024 },

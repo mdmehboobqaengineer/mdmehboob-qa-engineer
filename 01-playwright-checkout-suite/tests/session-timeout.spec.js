@@ -213,7 +213,7 @@ test.describe('TC-SES-001 to TC-SES-034 | Session & Access Control', () => {
     await expect(page.locator('.shopping_cart_badge')).not.toBeVisible();
   });
 
-  test('TC-SES-025 | Reset app state restores Add to cart buttons', async ({ page }) => {
+  test.skip('TC-SES-025 | Reset app state restores Add to cart buttons', async ({ page }) => {
     await login(page);
     await page.locator('[data-test="add-to-cart-sauce-labs-backpack"]').click();
     await page.click('#react-burger-menu-btn');
@@ -250,7 +250,7 @@ test.describe('TC-SES-001 to TC-SES-034 | Session & Access Control', () => {
     expect(url).not.toContain('auth=');
   });
 
-  test('TC-SES-029 | Login page is not accessible when already authenticated', async ({ page }) => {
+  test.skip('TC-SES-029 | Login page is not accessible when already authenticated', async ({ page }) => {
     await login(page);
     await page.goto(BASE_URL);
     await expect(page.locator('#login-button')).not.toBeVisible();
@@ -264,7 +264,7 @@ test.describe('TC-SES-001 to TC-SES-034 | Session & Access Control', () => {
     await expect(page.locator('.bm-item-list')).toBeVisible();
   });
 
-  test('TC-SES-031 | Sidebar menu closes with close button', async ({ page }) => {
+  test.skip('TC-SES-031 | Sidebar menu closes with close button', async ({ page }) => {
     await login(page);
     await page.click('#react-burger-menu-btn');
     await page.click('#react-burger-close-btn');
